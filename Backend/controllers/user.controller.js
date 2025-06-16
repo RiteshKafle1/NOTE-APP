@@ -35,6 +35,7 @@ const registerUser = async (req, res) => {
     return res.json({ error: true, message: "Something went wrong" });
   }
 };
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,4 +59,18 @@ const loginUser = async (req, res) => {
     return res.json({ error: true, message: "Login Failed" });
   }
 };
-module.exports = { registerUser,loginUser };
+
+const currentUser=async(req,res)=>{
+  try {
+    const user=await userModel.findOne(req.user._id).select('-password');
+    if(!user)
+        return res.json({error:true,message:'No user found'});
+    else
+      return res.json({error:false,user});
+  } catch (error) {
+    console.log('Error in fetching current user',error);
+    return res.json({error:true,message:'Failed to get profile'});
+    
+  }
+}
+module.exports = { registerUser,loginUser,currentUser };
