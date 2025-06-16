@@ -1,8 +1,17 @@
-const express=require('express');
-const app=express();
-require('dotenv').config();
+const express = require("express");
+const app = express();
+require("dotenv").config();
 
-const port=process.env.PORT;
-app.listen(port,()=>{
-  console.log('Server is running baby :) ',port);
-})
+const connectDB = require("../Backend/db/db");
+const userRouter = require("../Backend/routes/user.route");
+const noteRouter = require("./routes/note.route");
+
+app.use(express.json());
+app.use("/user", userRouter);
+app.use("/note", noteRouter);
+
+const port = process.env.PORT;
+app.listen(port, () => {
+  connectDB(process.env.DB_URI);
+  console.log("Server is running  :) on ", port);
+});
